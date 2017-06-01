@@ -541,7 +541,13 @@ export default class InternalModel {
       changedKeys = this._changedKeys(data.attributes);
     }
 
-    assign(this._data, data.attributes);
+    for (const key in data.attributes) {
+      if (typeof this._data[key] === 'object') {
+        set(this._data, key, data.attributes[key]);
+      } else {
+        this._data[key] = data.attributes[key];
+      }
+    }
     this.pushedData();
 
     if (this.hasRecord) {
